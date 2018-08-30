@@ -9,7 +9,6 @@ public class PlayerTest : MonoBehaviour {
 	public Transform centerOfMass;
 	public float speed;
 	public float steerAngle;
-	public float angleTolerance = .1f;
 
 	void Start () {
 
@@ -22,20 +21,17 @@ public class PlayerTest : MonoBehaviour {
 
 	void FixedUpdate () {
 
-		Vector3 velocity;
-
-		if (ki.ThrottleValue > 0) {
-			velocity = transform.forward * speed * ki.ThrottleValue;
-			velocity.y = rb.velocity.y;
-			rb.velocity = velocity;
-		}
+		// acceleration
+		var throttleForce = speed * ki.ThrottleValue;
+		//rb.MovePosition(transform.position + transform.forward * throttleForce * Time.deltaTime);
+		Vector3 movement = rb.velocity;
+		movement.x = throttleForce * Time.deltaTime;
+		movement.z = throttleForce * Time.deltaTime;
+		rb.velocity = movement;
 
 		// steering
 		var steerForce = steerAngle * ki.SteerValue;
 		rb.transform.Rotate(Vector3.up * steerForce * Time.deltaTime);
-
-		// slopes
-		Debug.Log((Mathf.PI / 180) * Mathf.Abs(transform.rotation.eulerAngles.x));
 
 	}
 }

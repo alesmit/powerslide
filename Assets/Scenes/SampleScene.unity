@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 348008127}
   - component: {fileID: 348008126}
   - component: {fileID: 348008125}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelRR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,11 +216,11 @@ SphereCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 348008123}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 35e92601305be429ea9b6ad3c7365ea6, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.52
+  m_Radius: 0.5
   m_Center: {x: 0.000001013279, y: 0.00000047683716, z: 0.00000014901161}
 --- !u!23 &348008126
 MeshRenderer:
@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 408647551}
   - component: {fileID: 408647550}
   - component: {fileID: 408647549}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelFL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,11 +301,11 @@ SphereCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 408647547}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 35e92601305be429ea9b6ad3c7365ea6, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.52
+  m_Radius: 0.5
   m_Center: {x: 0.000001013279, y: 0.00000047683713, z: -0.00000008940697}
 --- !u!23 &408647550
 MeshRenderer:
@@ -446,7 +446,7 @@ GameObject:
   - component: {fileID: 462883997}
   - component: {fileID: 462883996}
   - component: {fileID: 462883995}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelFR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -472,11 +472,11 @@ SphereCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 462883993}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 35e92601305be429ea9b6ad3c7365ea6, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.52
+  m_Radius: 0.5
   m_Center: {x: 0.000001013279, y: 0.00000047683716, z: 0.0000003874302}
 --- !u!23 &462883996
 MeshRenderer:
@@ -616,7 +616,7 @@ GameObject:
   - component: {fileID: 534669904}
   - component: {fileID: 534669903}
   - component: {fileID: 534669906}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Main Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -710,7 +710,7 @@ GameObject:
   - component: {fileID: 636042614}
   - component: {fileID: 636042613}
   - component: {fileID: 636042615}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Kart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1227,7 +1227,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1663164896}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1259,10 +1259,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1738006500}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: COM
   m_TagString: Untagged
-  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1375,7 +1375,7 @@ GameObject:
   - component: {fileID: 2146267678}
   - component: {fileID: 2146267677}
   - component: {fileID: 2146267676}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelRL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1401,11 +1401,11 @@ SphereCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2146267674}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 35e92601305be429ea9b6ad3c7365ea6, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.52
+  m_Radius: 0.5
   m_Center: {x: -0.0000008940697, y: 0.00000047683713, z: 0.00000014901161}
 --- !u!23 &2146267677
 MeshRenderer:

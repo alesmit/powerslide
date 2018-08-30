@@ -7,10 +7,10 @@ public class KartInput : MonoBehaviour {
     private float maxSteerValue = 1;
     private float maxThrottleValue = 1;
 
-    [Tooltip("The higher is, the more time it's needed to reach the max steer value.")]
+    [Tooltip("The higher the value, the more time it's needed to reach the max steer value.")]
     public float steerFactor;
     
-    [Tooltip("The higher is, the more time it's needed to reach the max throttle value.")]
+    [Tooltip("The higher the value, the more time it's needed to reach the max throttle value.")]
     public float throttleFactor;
 
     public float SteerValue { get; private set; }
@@ -35,8 +35,8 @@ public class KartInput : MonoBehaviour {
 
         /*
          * Assign SteerValue:
-         * Smoothly increase the SteerValue up to its max value as long as a D-Pad button is down
-         * Smoothly decrease it when a D-Pad button is no longer being pressed
+         * Smoothly increases the SteerValue up to its max value as long as a D-Pad button is down
+         * Smoothly decreases it when a D-Pad button is no longer being pressed
          */
 
         var steer = Time.deltaTime * steerFactor;
@@ -63,8 +63,8 @@ public class KartInput : MonoBehaviour {
 
         /*
          * Assign ThrottleValue:
-         * Smoothly increase the ThrottleValue up to its max value as long as the acceleration button is down
-         * Smoothly decrease it to zero when the gamer stops accelerating
+         * Smoothly increases the ThrottleValue up to its max value as long as the acceleration button is down
+         * Smoothly decreases it to zero when the player stops accelerating
          */
 
         var throttle = Time.deltaTime * throttleFactor;
@@ -86,7 +86,7 @@ public class KartInput : MonoBehaviour {
     }
 
     /*
-     * Force SteerValue to 0 when is very close to it
+     * Forces SteerValue to 0 when it's very close to it
      * to avoid kart flickering on the horizontal axis
      */
     private void ForceSteerZero() {

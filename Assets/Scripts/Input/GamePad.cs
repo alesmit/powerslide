@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class GamePad {
 
-    /*
-     * TODO @sevenyz add methods to get axis values (float) for:
-     * LeftStickX, LeftStickY, RightStickX, RightStickY
-     */
-
     public bool GetButtonRight() {
         return Input.GetButton("DPadR");
     }
@@ -67,6 +62,22 @@ public class GamePad {
 
     public bool GetButtonXbox() {
         return Input.GetButton("XboxButton");
+    }
+
+    public float GetLeftStickXAxis() {
+        return Input.GetAxis("LeftStickX");
+    }
+
+    public float GetLeftStickYAxis() {
+        return Input.GetAxis("LeftStickY");
+    }
+
+    public float GetRightStickXAxis() {
+        return Input.GetAxis("RightStickX");
+    }
+
+    public float GetRightStickYAxis() {
+        return Input.GetAxis("RightStickY");
     }
 
 }
