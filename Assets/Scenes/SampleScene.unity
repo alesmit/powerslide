@@ -827,13 +827,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedFactor: 50
+  jumpingFactor: 1000
   centerOfMass: {fileID: 1738006500}
   topSpeed: 1600
   topReverseSpeed: -250
   acceleration: 45
   deceleration: 15
   brakingForce: 100
-  jumpingForce: 60
+  jumpingForce: 70000
   steerAngle: 60
 --- !u!114 &636042615
 MonoBehaviour:
