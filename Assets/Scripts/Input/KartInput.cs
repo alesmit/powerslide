@@ -41,7 +41,7 @@ public class KartInput : MonoBehaviour {
 		} else if (IsTurningRight() && SteerValue < maxSteerValue) {
 			SteerValue += steer;
 
-		} else if (!IsTurningLeft() && !IsTurningRight()) {
+		} else if (!IsTurningLeft() && !IsTurningRight() && !IsBraking()) {
 
             ForceSteerZero();
 
@@ -88,6 +88,10 @@ public class KartInput : MonoBehaviour {
 
     public bool IsBraking() {
         return gamePad.GetButtonX();
+    }
+
+    public bool IsJumping() {
+        return gamePad.GetButtonLeftBumper() || gamePad.GetButtonRightBumper();
     }
 
 }
