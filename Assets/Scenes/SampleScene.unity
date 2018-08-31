@@ -708,8 +708,8 @@ GameObject:
   - component: {fileID: 636042608}
   - component: {fileID: 636042612}
   - component: {fileID: 636042614}
-  - component: {fileID: 636042613}
   - component: {fileID: 636042615}
+  - component: {fileID: 636042613}
   m_Layer: 9
   m_Name: Kart
   m_TagString: Untagged
@@ -814,7 +814,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steerFactor: 10
-  throttleFactor: 1.5
 --- !u!114 &636042614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -823,13 +822,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 636042607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2782c8cf0dac84e99a771805795b0a46, type: 3}
+  m_Script: {fileID: 11500000, guid: 1532a1c0f97dc451199f45c6f1bdd672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedFactor: 10
   centerOfMass: {fileID: 1738006500}
-  speed: 20
+  topSpeed: 750
+  acceleration: 60
+  deceleration: 120
   steerAngle: 60
-  angleTolerance: 0.1
 --- !u!114 &636042615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -841,7 +842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9d319114a20446409a84b462cb10787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityScale: 3
+  gravityScale: 2
   globalGravity: -9.81
 --- !u!1 &767740520
 GameObject:

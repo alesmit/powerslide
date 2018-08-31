@@ -5,16 +5,11 @@ using UnityEngine;
 public class KartInput : MonoBehaviour {
 
     private float maxSteerValue = 1;
-    private float maxThrottleValue = 1;
 
     [Tooltip("The higher the value, the more time it's needed to reach the max steer value.")]
     public float steerFactor;
-    
-    [Tooltip("The higher the value, the more time it's needed to reach the max throttle value.")]
-    public float throttleFactor;
 
     public float SteerValue { get; private set; }
-    public float ThrottleValue { get; private set; }
 
     private float steerNearZeroTolerance = .1f;
 
@@ -27,7 +22,6 @@ public class KartInput : MonoBehaviour {
 
         // set initial values
         SteerValue = 0;
-        ThrottleValue = 0;
 
     }
 
@@ -50,35 +44,13 @@ public class KartInput : MonoBehaviour {
 		} else if (!IsTurningLeft() && !IsTurningRight()) {
 
             ForceSteerZero();
-			
+
             if (SteerValue > 0) {
                 SteerValue -= steer;
 
             } else if (SteerValue < 0) {
                 SteerValue += steer;
 
-            }
-
-		}
-
-        /*
-         * Assign ThrottleValue:
-         * Smoothly increases the ThrottleValue up to its max value as long as the acceleration button is down
-         * Smoothly decreases it to zero when the player stops accelerating
-         */
-
-        var throttle = Time.deltaTime * throttleFactor;
-
-        if (IsAccelerating() && ThrottleValue < maxThrottleValue) {
-			ThrottleValue += throttle;
-
-		} else if (!IsAccelerating()) {
-
-            if (ThrottleValue > 0) {
-                ThrottleValue -= throttle;
-
-            } else if (ThrottleValue < 0) {
-                ThrottleValue = 0;
             }
 
 		}
@@ -91,7 +63,7 @@ public class KartInput : MonoBehaviour {
      */
     private void ForceSteerZero() {
         if (
-            (SteerValue > 0 && SteerValue < steerNearZeroTolerance) || 
+            (SteerValue > 0 && SteerValue < steerNearZeroTolerance) ||
             (SteerValue < 0 && SteerValue > -steerNearZeroTolerance)
         ) {
             SteerValue = 0;
