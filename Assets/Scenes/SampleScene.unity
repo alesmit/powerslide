@@ -676,9 +676,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.10036171, y: 0, z: 0, w: 0.994951}
-  m_LocalPosition: {x: 0, y: 15.6, z: -4.55}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.10036171, y: -0, z: -0, w: 0.994951}
+  m_LocalPosition: {x: 0, y: 15.5999975, z: -4.55}
+  m_LocalScale: {x: 1, y: 1.1844462, z: 1.1844463}
   m_Children: []
   m_Father: {fileID: 636042611}
   m_RootOrder: 3
@@ -691,10 +691,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 534669902}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e60e732e0c92426c8655d9f57dddc1b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8851e867c925a407193589233b3bc970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 636042611}
 --- !u!1 &636042607
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,7 +726,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.51, y: 1, z: 1.21}
+  m_Size: {x: 1.5, y: 1, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &636042609
 MeshRenderer:
@@ -795,14 +794,14 @@ Rigidbody:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 636042607}
   serializedVersion: 2
-  m_Mass: 100
-  m_Drag: 1
-  m_AngularDrag: 10
+  m_Mass: 1500
+  m_Drag: 0
+  m_AngularDrag: 10000
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &636042613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -814,7 +813,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffe4705ea1f65492cba6257cc1301022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steerFactor: 10
+  steerFactor: 5
 --- !u!114 &636042614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,13 +828,14 @@ MonoBehaviour:
   speedFactor: 50
   jumpingFactor: 1000
   centerOfMass: {fileID: 1738006500}
-  topSpeed: 1600
+  topSpeed: 2000
   topReverseSpeed: -250
-  acceleration: 45
+  acceleration: 25
   deceleration: 15
-  brakingForce: 100
+  brakingForce: 60
   jumpingForce: 70000
-  steerAngle: 60
+  steerAngle: 110
+  zRotationSmoothness: 0.1
 --- !u!114 &636042615
 MonoBehaviour:
   m_ObjectHideFlags: 0

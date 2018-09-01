@@ -41,6 +41,9 @@ public class KartPhysics : MonoBehaviour {
     [Tooltip("Steer handling. The more the value, the more the object steering is fast.")]
 	public float steerAngle;
 
+    [Tooltip("How much smooth rotate the object on the Z axis when is not grounded.")]
+    public float zRotationSmoothness = .1f;
+
     private float Speed { get; set; }
 
     void Awake() {
@@ -105,6 +108,12 @@ public class KartPhysics : MonoBehaviour {
             var steerForce = steerAngle * ki.SteerValue;
             var direction = ki.IsGoingReverse() ? Vector3.down : Vector3.up;
             rb.transform.Rotate(direction * steerForce * Time.deltaTime);
+        }
+
+        // block Z axis rotation when the kart is not grounded
+        if (!groundCheck.isGrounded) {
+            var targetRotation = transform.rotation * Quaternion.AngleAxis(transform.rotation.eulerAngles.z * -1, Vector3.forward);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 10 * zRotationSmoothness * Time.deltaTime);
         }
 
 	}
