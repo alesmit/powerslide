@@ -14,9 +14,6 @@ public class KartPhysics : MonoBehaviour {
     [Tooltip("Speed factor.")]
     public float speedFactor = 10f;
 
-    [Tooltip("Jumping factor.")]
-    public float jumpingFactor = 1000f;
-
     [Tooltip("Center of mass of the object.")]
 	public Transform centerOfMass;
 
@@ -35,14 +32,14 @@ public class KartPhysics : MonoBehaviour {
     [Tooltip("How fast will the object stop after pressing the brake button.")]
     public float brakingForce;
 
-    [Tooltip("How much vertical force apply on the object to make it jump.")]
-    public float jumpingForce;
-
     [Tooltip("Steer handling. The more the value, the more the object steering is fast.")]
 	public float steerAngle;
 
-    [Tooltip("How much smooth rotate the object on the Z axis when is not grounded.")]
-    public float zRotationSmoothness = .1f;
+    [Tooltip("How fast the object's X rotation resets when is not grounded.")]
+    public float flightXRotationRoughness = 1f;
+
+    [Tooltip("How fast the object's Z rotation resets when is not grounded.")]
+    public float flightZRotationRoughness = .3f;
 
     private float Speed { get; set; }
 
@@ -63,24 +60,25 @@ public class KartPhysics : MonoBehaviour {
 
 	void FixedUpdate() {
 
-        // Dynamically set the kart speed
+        ResetRotationWhenNotGrounded();
+        ApplySpeed();
+        ApplySteer();
+
+	}
+
+    /*
+     * Make the kart move forward/backward
+     */
+    private void ApplySpeed() {
+
+        // set speed dynamically
+
         var acc = acceleration * speedFactor * Time.deltaTime;
         var dec = deceleration * speedFactor * Time.deltaTime;
-        var brk = brakingForce * speedFactor * Time.deltaTime;
 
         if (groundCheck.isGrounded) {
 
-            if (ki.IsBraking()) {
-
-                ForceSpeedZero();
-
-                if (Speed > 0) {
-                    Speed -= brk;
-                } else if (Speed < 0) {
-                    Speed += brk;
-                }
-
-            } else if (ki.IsAccelerating() && Speed < topSpeed) {
+            if (ki.IsAccelerating() && Speed < topSpeed) {
                 Speed += acc;
 
             } else if (ki.IsGoingReverse() && Speed > topReverseSpeed) {
@@ -100,28 +98,20 @@ public class KartPhysics : MonoBehaviour {
 
         }
 
-        // move the kart forward according to Speed value
-        ApplySpeed();
-
-		// steering
-		if (Speed != 0) {
-            var steerForce = steerAngle * ki.SteerValue;
-            var direction = ki.IsGoingReverse() ? Vector3.down : Vector3.up;
-            rb.transform.Rotate(direction * steerForce * Time.deltaTime);
-        }
-
-        // block Z axis rotation when the kart is not grounded
-        if (!groundCheck.isGrounded) {
-            var targetRotation = transform.rotation * Quaternion.AngleAxis(transform.rotation.eulerAngles.z * -1, Vector3.forward);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 10 * zRotationSmoothness * Time.deltaTime);
-        }
-
-	}
-
-    private void ApplySpeed() {
+        // apply speed
         Vector3 velocity = transform.forward * Speed * Time.deltaTime;
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
+
+    }
+
+    /*
+     * Make the kart steer
+     */
+    private void ApplySteer() {
+        var steerForce = steerAngle * ki.SteerValue;
+        var direction = ki.IsGoingReverse() ? Vector3.down : Vector3.up;
+        rb.transform.Rotate(direction * steerForce * Time.deltaTime);
     }
 
     /*
@@ -134,6 +124,24 @@ public class KartPhysics : MonoBehaviour {
             (Speed < 0 && Speed > -speedNearZeroTolerance * speedFactor)
         ) {
             Speed = 0;
+        }
+    }
+
+    /*
+     * Reset Z and X rotation when the kart is not grounded
+     * Note: Y rotation is not resetted (even when flying the kart should be able to steer)
+     */
+    private void ResetRotationWhenNotGrounded() {
+        if (!groundCheck.isGrounded) {
+
+            // reset Z rotation
+            Quaternion zRotation = transform.rotation * Quaternion.AngleAxis(transform.rotation.eulerAngles.z * -1, Vector3.forward);
+            transform.rotation = Quaternion.Lerp(transform.rotation, zRotation, 10 * flightZRotationRoughness * Time.deltaTime);
+
+            // reset X rotation
+            Quaternion xRotation = transform.rotation * Quaternion.AngleAxis(transform.rotation.eulerAngles.x * -1, Vector3.right);
+            transform.rotation = Quaternion.Lerp(transform.rotation, xRotation, 10 * flightXRotationRoughness * Time.deltaTime);
+
         }
     }
 
