@@ -2,30 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KartInput : MonoBehaviour {
-
+public class KartInput : MonoBehaviour
+{
     private float maxSteerValue = 1;
 
     [Tooltip("The higher the value, the more time it's needed to reach the max steer value.")]
     public float steerFactor;
 
-    public float SteerValue { get; private set; }
+    [Tooltip("When the steering value has to be forced to 0.")]
+    public float zeroSteerThreshold = .1f;
 
-    private float steerNearZeroTolerance = .1f;
+    public float SteerValue { get; private set; }
 
     private GamePad gamePad;
 
-    void Awake() {
-
+    void Awake()
+    {
         // init gamepad class
         gamePad = new GamePad();
 
         // set initial values
         SteerValue = 0;
-
     }
 
-    void Update() {
+    void Update()
+    {
 
         /*
          * Assign SteerValue:
@@ -35,62 +36,57 @@ public class KartInput : MonoBehaviour {
 
         var steer = Time.deltaTime * steerFactor;
 
-        if (IsTurningLeft() && SteerValue > maxSteerValue * -1) {
-			SteerValue -= steer;
-
-		} else if (IsTurningRight() && SteerValue < maxSteerValue) {
-			SteerValue += steer;
-
-		} else if (!IsTurningLeft() && !IsTurningRight() && !IsBraking()) {
-
-            ForceSteerZero();
-
-            if (SteerValue > 0) {
-                SteerValue -= steer;
-
-            } else if (SteerValue < 0) {
-                SteerValue += steer;
-
-            }
-
-		}
-
-    }
-
-    /*
-     * Forces SteerValue to 0 when it's very close to it
-     * to avoid kart flickering on the horizontal axis
-     */
-    private void ForceSteerZero() {
-        if (
-            (SteerValue > 0 && SteerValue < steerNearZeroTolerance) ||
-            (SteerValue < 0 && SteerValue > -steerNearZeroTolerance)
-        ) {
-            SteerValue = 0;
+        if (IsTurningLeft() && SteerValue > -maxSteerValue)
+        {
+            SteerValue -= steer;
         }
+        else if (IsTurningRight() && SteerValue < maxSteerValue)
+        {
+            SteerValue += steer;
+        }
+        else if (!IsTurningLeft() && !IsTurningRight() && !IsBraking())
+        {
+            SteerValue = Utils.AvoidNearZero(SteerValue, zeroSteerThreshold);
+
+            if (SteerValue > 0)
+            {
+                SteerValue -= steer;
+            }
+            else if (SteerValue < 0)
+            {
+                SteerValue += steer;
+            }
+        }
+
     }
 
-    public bool IsTurningRight() {
+    public bool IsTurningRight()
+    {
         return gamePad.GetButtonRight();
     }
 
-    public bool IsTurningLeft() {
+    public bool IsTurningLeft()
+    {
         return gamePad.GetButtonLeft();
     }
 
-    public bool IsAccelerating() {
+    public bool IsAccelerating()
+    {
         return gamePad.GetButtonA();
     }
 
-    public bool IsGoingReverse() {
+    public bool IsGoingReverse()
+    {
         return gamePad.GetButtonDown();
     }
 
-    public bool IsBraking() {
+    public bool IsBraking()
+    {
         return gamePad.GetButtonX();
     }
 
-    public bool IsJumping() {
+    public bool IsJumping()
+    {
         return gamePad.GetButtonLeftBumper() || gamePad.GetButtonRightBumper();
     }
 

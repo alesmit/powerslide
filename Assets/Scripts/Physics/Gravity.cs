@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Gravity : MonoBehaviour {
+public class Gravity : MonoBehaviour
+{
 
-	[Tooltip("Gravity factor.")]
+    [Tooltip("Gravity factor.")]
     public float gravityScale = 1.0f;
 
     [Tooltip("Global gravity value.")]
@@ -13,14 +14,16 @@ public class Gravity : MonoBehaviour {
 
     private Rigidbody rb;
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
-	}
+    }
 
-    private void FixedUpdate() {
-		Vector3 gravity = globalGravity * gravityScale * Vector3.up;
-		rb.AddForce(gravity, ForceMode.Acceleration);
-	}
+    private void FixedUpdate()
+    {
+        Vector3 gravity = globalGravity * gravityScale * Vector3.up;
+        rb.AddForce(gravity, ForceMode.Acceleration);
+    }
 
 }
