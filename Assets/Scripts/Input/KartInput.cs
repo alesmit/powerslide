@@ -44,7 +44,7 @@ public class KartInput : MonoBehaviour
         {
             SteerValue += steer;
         }
-        else if (!IsTurningLeft() && !IsTurningRight() && !IsBraking())
+        else if (!IsTurningLeft() && !IsTurningRight())
         {
             SteerValue = Utils.AvoidNearZero(SteerValue, zeroSteerThreshold);
 

@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KartPhysics : MonoBehaviour
 {
     private Rigidbody rb;
     private KartInput ki;
     private GroundCheck groundCheck;
+
+    public Text speedDisplay;
 
     [Tooltip("Center of mass of the object.")]
     public Transform centerOfMass;
@@ -94,8 +97,9 @@ public class KartPhysics : MonoBehaviour
 
             if (ki.IsAccelerating() && Speed < topSpeed /*maxSpeed*/)
             {
-                Speed += speedIncrement * Time.deltaTime;
-                Debug.Log(string.Format("Speed, Max, Increment: {0}, {1}, {2}", Speed, topSpeed, speedIncrement));
+                var normalizedSpeedIncrement = speedIncrement / topSpeed;
+                float _speedIncrement = accelerationCurve.Evaluate(normalizedSpeedIncrement) * topSpeed * Time.deltaTime;
+                Speed += _speedIncrement;
             }
 
             if (ki.IsGoingReverse() && Speed > topReverseSpeed)
@@ -121,6 +125,8 @@ public class KartPhysics : MonoBehaviour
             }
 
         }
+
+        speedDisplay.text = Mathf.RoundToInt(Speed).ToString();
 
         // apply speed
         Vector3 velocity = transform.forward * Speed * Time.deltaTime;
