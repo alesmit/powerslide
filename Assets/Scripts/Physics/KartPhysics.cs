@@ -74,6 +74,11 @@ public class KartPhysics : MonoBehaviour {
         // set speed dynamically
 
         var acc = acceleration * speedFactor * Time.deltaTime;
+
+        var xOppositionForce = transform.rotation.x * -1;
+        acc += xOppositionForce * 100000 * Time.deltaTime;
+
+
         var dec = deceleration * speedFactor * Time.deltaTime;
 
         if (groundCheck.isGrounded) {
@@ -97,6 +102,10 @@ public class KartPhysics : MonoBehaviour {
             }
 
         }
+
+
+
+        Debug.Log(Speed);
 
         // apply speed
         Vector3 velocity = transform.forward * Speed * Time.deltaTime;
