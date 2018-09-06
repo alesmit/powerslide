@@ -10,9 +10,13 @@ public class KartPhysics : MonoBehaviour
     private GroundCheck groundCheck;
 
     public Text speedDisplay;
+    public Text speedometer;
 
     [Tooltip("Center of mass of the object.")]
     public Transform centerOfMass;
+
+    [Tooltip("How much the top speed decreases when steering.")]
+    public float speedSteerDecrementFactor = 200f;
 
     [Tooltip("Slope factor: how fast speed changes according to the slope angle.")]
     public float slopeFactor;
@@ -45,6 +49,7 @@ public class KartPhysics : MonoBehaviour
     public float flightZRotationRoughness;
 
     private float Speed { get; set; }
+    private SpeedTrend speedTrend;
 
     void Awake()
     {
@@ -66,6 +71,7 @@ public class KartPhysics : MonoBehaviour
         ResetRotationWhenNotGrounded();
         ApplySteer();
         ApplySpeed();
+        UpdateUI();
     }
 
     /*
@@ -75,10 +81,6 @@ public class KartPhysics : MonoBehaviour
     {
         if (groundCheck.isGrounded)
         {
-            // define how much the speed should increment/decrement
-            //var speedIncrement = accelerationCurve.Evaluate(accelerationPower / topSpeed);
-            var speedIncrement = accelerationPower;
-            var speedDecrement = decelerationPower;
 
             /*
 
@@ -95,44 +97,70 @@ public class KartPhysics : MonoBehaviour
 
             */
 
-            if (ki.IsAccelerating() && Speed < topSpeed /*maxSpeed*/)
+            var speedDecrementDueToSteering = Mathf.Abs(ki.SteerValue) * speedSteerDecrementFactor;
+            var maxSpeed = topSpeed - speedDecrementDueToSteering;
+
+            if (ki.IsAccelerating())
             {
-                var normalizedSpeedIncrement = speedIncrement / topSpeed;
-                float _speedIncrement = accelerationCurve.Evaluate(normalizedSpeedIncrement) * topSpeed * Time.deltaTime;
-                Speed += _speedIncrement;
+                float normalizedSpeedIncrement = accelerationPower / maxSpeed;
+                float speedIncrement = accelerationCurve.Evaluate(normalizedSpeedIncrement) * maxSpeed;
+
+                if (Speed < maxSpeed)
+                {
+                    speedTrend = SpeedTrend.Increasing;
+                    Speed += speedIncrement * Time.deltaTime;
+                }
+                else
+                {
+                    speedTrend = SpeedTrend.Decreasing;
+                    Speed -= speedIncrement * Time.deltaTime;
+                }
+
             }
 
             if (ki.IsGoingReverse() && Speed > topReverseSpeed)
             {
-                Speed -= speedIncrement * Time.deltaTime;
+                speedTrend = SpeedTrend.Decreasing;
+                Speed -= accelerationPower * Time.deltaTime;
             }
 
             if (!ki.IsAccelerating() && !ki.IsGoingReverse() /*&& slope == 0*/)
             {
 
-                // forces Speed to be 0 when it's very close to it to avoid kart slowly moving forward/backward
+                // force Speed to be 0 when it's very close to it to avoid kart slowly moving forward/backward
                 Speed = Utils.AvoidNearZero(Speed, zeroSpeedThreshold);
 
                 if (Speed > 0)
                 {
-                    Speed -= speedDecrement * Time.deltaTime;
+                    speedTrend = SpeedTrend.Decreasing;
+                    Speed -= decelerationPower * Time.deltaTime;
                 }
                 else if (Speed < 0)
                 {
-                    Speed += speedDecrement * Time.deltaTime;
+                    speedTrend = SpeedTrend.Increasing;
+                    Speed += decelerationPower * Time.deltaTime;
                 }
 
             }
 
         }
 
-        speedDisplay.text = Mathf.RoundToInt(Speed).ToString();
-
         // apply speed
         Vector3 velocity = transform.forward * Speed * Time.deltaTime;
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
 
+    }
+
+    private void UpdateUI()
+    {
+        // show speed
+        speedDisplay.text = Mathf.RoundToInt(Speed).ToString();
+
+        // rotate speedometer
+        var normalizedSpeed = Speed / topSpeed * .95f;
+        var angle = Mathf.Rad2Deg * Mathf.Asin(-normalizedSpeed);
+        speedometer.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     /*

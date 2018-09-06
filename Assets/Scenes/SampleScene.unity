@@ -278,6 +278,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1434142995}
   - {fileID: 628556375}
   m_Father: {fileID: 496695351}
   m_RootOrder: 0
@@ -285,7 +286,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 14, y: 10}
-  m_SizeDelta: {x: 136.3, y: 63}
+  m_SizeDelta: {x: 136.3, y: 126.09}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &397247521
 MonoBehaviour:
@@ -688,7 +689,7 @@ GameObject:
   - component: {fileID: 628556377}
   - component: {fileID: 628556376}
   m_Layer: 5
-  m_Name: Text
+  m_Name: SpeedDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -705,7 +706,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 397247520}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -744,7 +745,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 0
 --- !u!222 &628556377
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -884,12 +885,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1532a1c0f97dc451199f45c6f1bdd672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedDisplay: {fileID: 628556376}
+  speedometer: {fileID: 1434142996}
   centerOfMass: {fileID: 1738006500}
+  speedSteerDecrementFactor: 500
   slopeFactor: 50
   zeroSpeedThreshold: 10
-  topSpeed: 2000
-  topReverseSpeed: -150
-  accelerationPower: 300
+  topSpeed: 1600
+  topReverseSpeed: -230
+  accelerationPower: 450
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -903,6 +907,15 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
+      time: 0.113629274
+      value: 0.7608652
+      inSlope: 0.7565647
+      outSlope: 0.7565647
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.07560707
+    - serializedVersion: 3
       time: 1
       value: 1
       inSlope: 0
@@ -914,7 +927,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  decelerationPower: 500
+  decelerationPower: 600
   steeringSpeed: 75
   flightXRotationRoughness: 0.4
   flightZRotationRoughness: 0.5
@@ -929,7 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9d319114a20446409a84b462cb10787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityScale: 3
+  gravityScale: 4
   globalGravity: -9.81
 --- !u!1 &669362959
 GameObject:
@@ -954,15 +967,15 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 669362959}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
+  m_SubmitButton: 
+  m_CancelButton: 
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
@@ -1453,6 +1466,81 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1348010125}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1434142994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1434142995}
+  - component: {fileID: 1434142997}
+  - component: {fileID: 1434142996}
+  m_Layer: 5
+  m_Name: Speedometer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1434142995
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1434142994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 397247520}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 33.2163, y: -2.3360138}
+  m_SizeDelta: {x: 134.21, y: 93}
+  m_Pivot: {x: 0.71654385, y: 0.3586055}
+--- !u!114 &1434142996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1434142994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 27
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 300
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: ____
+--- !u!222 &1434142997
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1434142994}
+  m_CullTransparentMesh: 0
 --- !u!1 &1599200376
 GameObject:
   m_ObjectHideFlags: 0
