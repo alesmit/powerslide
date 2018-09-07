@@ -973,6 +973,7 @@ MonoBehaviour:
   speedDisplay: {fileID: 628556376}
   speedometer: {fileID: 1434142996}
   centerOfMass: {fileID: 1738006500}
+  jumpForce: 2000
   speedSteerDecrementFactor: 500
   slopeFactor: 80
   slopeImpactOnTopSpeed: 5
