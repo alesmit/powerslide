@@ -21,6 +21,9 @@ public class KartPhysics : MonoBehaviour
     [Tooltip("Slope factor: how fast speed changes according to the slope angle.")]
     public float slopeFactor;
 
+    [Tooltip("How much slopes can impact on the top speed.")]
+    public float slopeImpactOnTopSpeed;
+
     [Tooltip("When the speed has to be forced to 0.")]
     public float zeroSpeedThreshold;
 
@@ -82,28 +85,22 @@ public class KartPhysics : MonoBehaviour
         if (groundCheck.isGrounded)
         {
 
-            /*
+            // top speed may change depending some factors:
 
-            // get a value between 0 and 1 which is the slope of the kart
-            float slope = Utils.AvoidNearZero(Mathf.Round(transform.forward.normalized.y * 1000) / 1000);
-            float slopeVariation = slope * slopeFactor * -1;
+            // on the slope
+            float slope = Utils.AvoidNearZero(Mathf.Round(transform.forward.normalized.y * 1000) / 1000, .005f);
+            float speedChangeDueToSlope = slope * slopeFactor * -1;
 
-            // apply slope variation to the top speed
-            float maxSpeed = topSpeed + slopeVariation;
+            // on the steering
+            float speedChangeDueToSteering = Mathf.Abs(ki.SteerValue) * speedSteerDecrementFactor * -1;
 
-            // apply slope variation to the speed increment/decrement
-            speedIncrement += speedIncrement * slopeVariation;
-            speedDecrement += speedIncrement * slopeVariation;
-
-            */
-
-            var speedDecrementDueToSteering = Mathf.Abs(ki.SteerValue) * speedSteerDecrementFactor;
-            var maxSpeed = topSpeed - speedDecrementDueToSteering;
+            // create a new var maxSpeed to apply those changes
+            float maxSpeed = topSpeed + speedChangeDueToSteering + speedChangeDueToSlope * slopeImpactOnTopSpeed;
 
             if (ki.IsAccelerating())
             {
-                float normalizedSpeedIncrement = accelerationPower / maxSpeed;
-                float speedIncrement = accelerationCurve.Evaluate(normalizedSpeedIncrement) * maxSpeed;
+                float normalizedSpeedIncrement = accelerationPower / topSpeed;
+                float speedIncrement = accelerationCurve.Evaluate(normalizedSpeedIncrement) * topSpeed;
 
                 if (Speed < maxSpeed)
                 {
@@ -124,7 +121,7 @@ public class KartPhysics : MonoBehaviour
                 Speed -= accelerationPower * Time.deltaTime;
             }
 
-            if (!ki.IsAccelerating() && !ki.IsGoingReverse() /*&& slope == 0*/)
+            if (!ki.IsAccelerating() && !ki.IsGoingReverse())
             {
 
                 // force Speed to be 0 when it's very close to it to avoid kart slowly moving forward/backward
@@ -142,6 +139,9 @@ public class KartPhysics : MonoBehaviour
                 }
 
             }
+
+            // speed always increases or decreases depending on the slope
+            Speed += speedChangeDueToSlope;
 
         }
 
