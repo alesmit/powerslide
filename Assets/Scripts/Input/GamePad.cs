@@ -6,12 +6,12 @@ public class GamePad
 {
     public bool GetButtonRight()
     {
-        return Input.GetButton("DPadR");
+        return Input.GetButton("DPadR") || Input.GetKey(KeyCode.RightArrow);
     }
 
     public bool GetButtonLeft()
     {
-        return Input.GetButton("DPadL");
+        return Input.GetButton("DPadL") || Input.GetKey(KeyCode.LeftArrow);
     }
 
     public bool GetButtonDown()
@@ -26,7 +26,7 @@ public class GamePad
 
     public bool GetButtonA()
     {
-        return Input.GetButton("AButton");
+        return Input.GetButton("AButton") || Input.GetKey(KeyCode.S);
     }
 
     public bool GetButtonY()
@@ -56,12 +56,12 @@ public class GamePad
 
     public bool GetButtonLeftBumper()
     {
-        return Input.GetButton("LeftBumper");
+        return Input.GetButtonDown("LeftBumper") || Input.GetKeyDown(KeyCode.A);
     }
 
     public bool GetButtonRightBumper()
     {
-        return Input.GetButton("RightBumper");
+        return Input.GetButtonDown("RightBumper") || Input.GetKeyDown(KeyCode.D);
     }
 
     public bool GetButtonLeftTrigger()

@@ -15,6 +15,9 @@ public class KartPhysics : MonoBehaviour
     [Tooltip("Center of mass of the object.")]
     public Transform centerOfMass;
 
+    [Tooltip("Jump force.")]
+    public float jumpForce;
+
     [Tooltip("How much the top speed decreases when steering.")]
     public float speedSteerDecrementFactor = 200f;
 
@@ -74,7 +77,16 @@ public class KartPhysics : MonoBehaviour
         ResetRotationWhenNotGrounded();
         ApplySteer();
         ApplySpeed();
+    }
+
+    private void LateUpdate() 
+    {
         UpdateUI();
+    }
+
+    private void Update()
+    {
+        ApplyJump();
     }
 
     /*
@@ -150,6 +162,13 @@ public class KartPhysics : MonoBehaviour
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
 
+    }
+
+    private void ApplyJump()
+    {
+        if (ki.IsJumping()) {
+            rb.AddForce(Vector3.up * jumpForce * Time.deltaTime, ForceMode.VelocityChange);
+        }
     }
 
     private void UpdateUI()
