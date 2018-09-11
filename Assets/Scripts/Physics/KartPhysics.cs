@@ -79,14 +79,21 @@ public class KartPhysics : MonoBehaviour
         ApplySpeed();
     }
 
-    private void LateUpdate() 
+    void Update()
+    {
+        ApplyJump();
+    }
+
+    private void LateUpdate()
     {
         UpdateUI();
     }
 
-    private void Update()
+    private void ApplyJump()
     {
-        ApplyJump();
+        if (ki.IsJumping) {
+            rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        }
     }
 
     /*
@@ -109,7 +116,7 @@ public class KartPhysics : MonoBehaviour
             // create a new var maxSpeed to apply those changes
             float maxSpeed = topSpeed + speedChangeDueToSteering + speedChangeDueToSlope * slopeImpactOnTopSpeed;
 
-            if (ki.IsAccelerating())
+            if (ki.IsAccelerating)
             {
                 float normalizedSpeedIncrement = accelerationPower / topSpeed;
                 float speedIncrement = accelerationCurve.Evaluate(normalizedSpeedIncrement) * topSpeed;
@@ -127,13 +134,13 @@ public class KartPhysics : MonoBehaviour
 
             }
 
-            if (ki.IsGoingReverse() && Speed > topReverseSpeed)
+            if (ki.IsGoingReverse && Speed > topReverseSpeed)
             {
                 speedTrend = SpeedTrend.Decreasing;
                 Speed -= accelerationPower * Time.deltaTime;
             }
 
-            if (!ki.IsAccelerating() && !ki.IsGoingReverse())
+            if (!ki.IsAccelerating && !ki.IsGoingReverse)
             {
 
                 // force Speed to be 0 when it's very close to it to avoid kart slowly moving forward/backward
@@ -164,13 +171,6 @@ public class KartPhysics : MonoBehaviour
 
     }
 
-    private void ApplyJump()
-    {
-        if (ki.IsJumping()) {
-            rb.AddForce(Vector3.up * jumpForce * Time.deltaTime, ForceMode.VelocityChange);
-        }
-    }
-
     private void UpdateUI()
     {
         // show speed
@@ -188,7 +188,7 @@ public class KartPhysics : MonoBehaviour
     private void ApplySteer()
     {
         var steerForce = steeringSpeed * ki.SteerValue;
-        var direction = ki.IsGoingReverse() && !ki.IsAccelerating() ? Vector3.down : Vector3.up;
+        var direction = ki.IsGoingReverse && !ki.IsAccelerating ? Vector3.down : Vector3.up;
         rb.transform.Rotate(direction * steerForce * Time.deltaTime);
     }
 
