@@ -54,24 +54,34 @@ public class GamePad
         return Input.GetButton("BackButton");
     }
 
-    public bool GetButtonLeftBumper()
+    public bool GetButtonDownLeftBumper()
     {
         return Input.GetButtonDown("LeftBumper") || Input.GetKeyDown(KeyCode.A);
     }
 
-    public bool GetButtonRightBumper()
+    public bool GetButtonDownRightBumper()
     {
         return Input.GetButtonDown("RightBumper") || Input.GetKeyDown(KeyCode.D);
     }
 
+    public bool GetButtonLeftBumper()
+    {
+        return Input.GetButton("LeftBumper") || Input.GetKey(KeyCode.A);
+    }
+
+    public bool GetButtonRightBumper()
+    {
+        return Input.GetButton("RightBumper") || Input.GetKey(KeyCode.D);
+    }
+
     public bool GetButtonLeftTrigger()
     {
-        return Input.GetButton("LeftTrigger");
+        return Input.GetButtonDown("LeftTrigger");
     }
 
     public bool GetButtonRightTrigger()
     {
-        return Input.GetButton("RightTrigger");
+        return Input.GetButtonDown("RightTrigger");
     }
 
     public bool GetButtonXbox()

@@ -20,6 +20,7 @@ public class KartInput : MonoBehaviour
     public bool IsGoingReverse { get; private set; }
     public bool IsBraking { get; private set; }
     public bool IsJumping { get; private set; }
+    public bool IsPowersliding { get; private set; }
 
     private GamePad gamePad;
 
@@ -39,7 +40,8 @@ public class KartInput : MonoBehaviour
         IsAccelerating = gamePad.GetButtonA();
         IsGoingReverse = gamePad.GetButtonDown();
         IsBraking = gamePad.GetButtonX();
-        IsJumping = gamePad.GetButtonLeftBumper() || gamePad.GetButtonRightBumper();
+        IsJumping = gamePad.GetButtonDownLeftBumper() || gamePad.GetButtonDownRightBumper();
+        IsPowersliding = gamePad.GetButtonLeftBumper() || gamePad.GetButtonRightBumper();
 
         SetSteerValue();
 

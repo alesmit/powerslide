@@ -15,20 +15,29 @@ public class KartPhysics : MonoBehaviour
     [Tooltip("Center of mass of the object.")]
     public Transform centerOfMass;
 
-    [Tooltip("Jump force.")]
-    public float jumpForce;
+    [Header("Powerslide")]
 
-    [Tooltip("How much the top speed decreases when steering.")]
-    public float speedSteerDecrementFactor = 200f;
+    [Tooltip("Minimum speed required for powerslides to work.")]
+    public float powMinSpeed = 500f;
 
-    [Tooltip("Slope factor: how fast speed changes according to the slope angle.")]
+    [Tooltip("How much X velocity increases/decreases during powerslides.")]
+    public float powXVelVariation;
+
+    [Tooltip("How much steer force increases during powerslides.")]
+    public float powSteerForceFactor;
+
+    [Tooltip("Boost to apply in powerlides.")]
+    public float powBoostForce;
+
+    [Header("Slope")]
+
+    [Tooltip("How fast speed changes according to the slope angle.")]
     public float slopeFactor;
 
     [Tooltip("How much slopes can impact on the top speed.")]
     public float slopeImpactOnTopSpeed;
 
-    [Tooltip("When the speed has to be forced to 0.")]
-    public float zeroSpeedThreshold;
+    [Header("Speed")]
 
     [Tooltip("Maximum speed the object reaches when going on a straight surface.")]
     public float topSpeed;
@@ -45,8 +54,23 @@ public class KartPhysics : MonoBehaviour
     [Tooltip("How fast will object reach the 0 speed after releasing the acceleration button.")]
     public float decelerationPower;
 
-    [Tooltip("Steering speed. The more the value, the more the object steering is fast.")]
+    [Tooltip("Threshold to force the speed to 0.")]
+    public float zeroSpeedThreshold;
+
+    [Tooltip("How much the top speed decreases when steering.")]
+    public float speedSteerDecrementFactor = 200f;
+
+    [Header("Steering")]
+
+    [Tooltip("The more the value, the more the object steering is fast.")]
     public float steeringSpeed;
+
+    [Header("Jumping")]
+
+    [Tooltip("Jump force.")]
+    public float jumpForce;
+
+    [Header("Not grounded behaviour")]
 
     [Tooltip("How fast the object's X rotation resets when is not grounded.")]
     public float flightXRotationRoughness;
@@ -55,7 +79,12 @@ public class KartPhysics : MonoBehaviour
     public float flightZRotationRoughness;
 
     private float Speed { get; set; }
-    private SpeedTrend speedTrend;
+
+    [Header("READ ONLY. Please do not touch values here.")]
+
+    public SpeedTrend speedTrend;
+
+    public PowerslideDirection powerslideDirection;
 
     void Awake()
     {
@@ -82,6 +111,8 @@ public class KartPhysics : MonoBehaviour
     void Update()
     {
         ApplyJump();
+        UpdatePowerslideDirection();
+        ApplyPowerslideBoost();
     }
 
     private void LateUpdate()
@@ -91,7 +122,7 @@ public class KartPhysics : MonoBehaviour
 
     private void ApplyJump()
     {
-        if (ki.IsJumping) {
+        if (ki.IsJumping && groundCheck.isGrounded && powerslideDirection == PowerslideDirection.None) {
             rb.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime, ForceMode.VelocityChange);
         }
     }
@@ -101,7 +132,7 @@ public class KartPhysics : MonoBehaviour
      */
     private void ApplySpeed()
     {
-        if (groundCheck.isGrounded)
+        if (groundCheck.isGrounded && powerslideDirection == PowerslideDirection.None)
         {
 
             // top speed may change depending some factors:
@@ -166,9 +197,65 @@ public class KartPhysics : MonoBehaviour
 
         // apply speed
         Vector3 velocity = transform.forward * Speed * Time.deltaTime;
+
+        // alter velocity Z and X when the kart is powersliding
+        if (powerslideDirection != PowerslideDirection.None)
+        {
+            velocity = GetPowerslideVelocity(velocity);
+        }
+
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
 
+    }
+
+    private void UpdatePowerslideDirection()
+    {
+        if (ki.IsPowersliding && groundCheck.isGrounded && ki.SteerValue != 0 && Speed > powMinSpeed)
+        {
+            if (powerslideDirection == PowerslideDirection.None)
+            {
+                powerslideDirection = ki.SteerValue > 0
+                    ? PowerslideDirection.Right
+                    : PowerslideDirection.Left;
+            }
+        }
+        else
+        {
+            powerslideDirection = PowerslideDirection.None;
+        }
+    }
+
+    private void ApplyPowerslideBoost()
+    {
+        if (ki.IsJumping && powerslideDirection != PowerslideDirection.None)
+        {
+            rb.AddRelativeForce(transform.forward * powBoostForce * Time.fixedDeltaTime, ForceMode.Impulse);
+            Debug.Log("Boost!");
+        }
+    }
+
+    private Vector3 GetPowerslideVelocity(Vector3 baseVelocity)
+    {
+        var localVelocity = transform.InverseTransformDirection(baseVelocity);
+
+        switch (powerslideDirection)
+        {
+            case PowerslideDirection.Right:
+            localVelocity.x -= powXVelVariation;
+            break;
+
+            case PowerslideDirection.Left:
+            localVelocity.x += powXVelVariation;
+            break;
+
+            default:
+            case PowerslideDirection.None:
+            localVelocity.x = 0;
+            break;
+        }
+
+        return transform.TransformDirection(localVelocity);
     }
 
     private void UpdateUI()
@@ -189,6 +276,12 @@ public class KartPhysics : MonoBehaviour
     {
         var steerForce = steeringSpeed * ki.SteerValue;
         var direction = ki.IsGoingReverse && !ki.IsAccelerating ? Vector3.down : Vector3.up;
+
+        if (powerslideDirection != PowerslideDirection.None)
+        {
+            steerForce *= powSteerForceFactor;
+        }
+
         rb.transform.Rotate(direction * steerForce * Time.deltaTime);
     }
 
