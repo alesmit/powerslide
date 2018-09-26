@@ -22,6 +22,8 @@ public class KartInput : MonoBehaviour
     public bool IsJumping { get; private set; }
     public bool IsPowersliding { get; private set; }
 
+    public Animator anim;
+
     private GamePad gamePad;
 
     void Awake()
@@ -44,6 +46,9 @@ public class KartInput : MonoBehaviour
         IsPowersliding = gamePad.GetButtonLeftBumper() || gamePad.GetButtonRightBumper();
 
         SetSteerValue();
+
+        anim.SetFloat("AnimSteerValue", SteerValue);
+        Debug.Log(SteerValue);
 
     }
 

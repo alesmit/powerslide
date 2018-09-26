@@ -20,11 +20,7 @@ public class KartPhysics : MonoBehaviour
     [Tooltip("Minimum speed required for powerslides to work.")]
     public float powMinSpeed = 500f;
 
-    [Tooltip("How much X velocity increases/decreases during powerslides.")]
-    public float powXVelVariation;
-
-    [Tooltip("How much steer force increases during powerslides.")]
-    public float powSteerForceFactor;
+    public float powSteerForceFactor; // TODO implement
 
     [Tooltip("Boost to apply in powerlides.")]
     public float powBoostForce;
@@ -127,9 +123,6 @@ public class KartPhysics : MonoBehaviour
         }
     }
 
-    /*
-     * Make the kart move forward/backward
-     */
     private void ApplySpeed()
     {
         if (groundCheck.isGrounded && powerslideDirection == PowerslideDirection.None)
@@ -235,6 +228,9 @@ public class KartPhysics : MonoBehaviour
         }
     }
 
+    /*
+     * TODO complete implementation
+     */
     private Vector3 GetPowerslideVelocity(Vector3 baseVelocity)
     {
         var localVelocity = transform.InverseTransformDirection(baseVelocity);
@@ -242,11 +238,13 @@ public class KartPhysics : MonoBehaviour
         switch (powerslideDirection)
         {
             case PowerslideDirection.Right:
-            localVelocity.x -= powXVelVariation;
+            localVelocity.x += 0;
+            localVelocity.y += 0;
             break;
 
             case PowerslideDirection.Left:
-            localVelocity.x += powXVelVariation;
+            localVelocity.x += 0;
+            localVelocity.y += 0;
             break;
 
             default:
@@ -269,19 +267,10 @@ public class KartPhysics : MonoBehaviour
         speedometer.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    /*
-     * Make the kart steer
-     */
     private void ApplySteer()
     {
         var steerForce = steeringSpeed * ki.SteerValue;
         var direction = ki.IsGoingReverse && !ki.IsAccelerating ? Vector3.down : Vector3.up;
-
-        if (powerslideDirection != PowerslideDirection.None)
-        {
-            steerForce *= powSteerForceFactor;
-        }
-
         rb.transform.Rotate(direction * steerForce * Time.deltaTime);
     }
 
